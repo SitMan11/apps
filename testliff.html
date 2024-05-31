@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LIFF App</title>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+</head>
+<body>
+    <h1>LIFF App</h1>
+    <button id="loginButton">Login</button>
+    <div id="profileInfo"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async function () {
+            try {
+                await liff.init({
+                    liffId: '2005480115-azevV51g',
+                    withLoginOnExternalBrowser: true
+                });
+                if (!liff.isLoggedIn()) {
+                    document.getElementById('loginButton').style.display = 'block';
+                    document.getElementById('loginButton').addEventListener('click', function () {
+                        liff.login({ redirectUri: window.location.href });
+                    });
+                } else {
+                    const profile = await liff.getProfile();
+                    console.log('Profile:', profile);
+                    document.getElementById('profileInfo').innerText = JSON.stringify(profile, null, 2);
+                }
+            } catch (error) {
+                console.error('Error initializing LIFF:', error);
+            }
+        });
+    </script>
+</body>
+</html>
