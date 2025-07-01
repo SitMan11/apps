@@ -3,12 +3,15 @@
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <base target="_top">
       <style>
-         /* ป้องกันการเลือกข้อความ */
          body {
-            -webkit-user-select: none; /* Chrome, Safari */
-            -moz-user-select: none; /* Firefox */
-            -ms-user-select: none; /* IE, Edge */
-            user-select: none; /* Standard */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            overflow: hidden; /* ป้องกันการเลื่อนเพื่อดูโค้ด */
+         }
+         iframe {
+            pointer-events: none; /* ป้องกันการโต้ตอบกับ iframe โดยตรง */
          }
       </style>
       <script>
@@ -18,15 +21,26 @@
             alert('การคลิกขวาถูกปิดใช้งานเพื่อปกป้องเนื้อหา');
          });
 
-         // ป้องกันการกด F12, Ctrl+Shift+I, Ctrl+U เพื่อเปิด developer tools หรือ view source
+         // ป้องกันการกดปุ่มลัด
          document.addEventListener('keydown', function(e) {
             if (e.key === 'F12' || 
                 (e.ctrlKey && e.shiftKey && e.key === 'I') || 
-                (e.ctrlKey && e.key === 'u')) {
+                (e.ctrlKey && e.key === 'u') || 
+                e.key === 'F5' || e.key === 'Ctrl') {
                e.preventDefault();
                alert('การเข้าถึงโค้ดถูกจำกัด');
             }
          });
+
+         // พยายามควบคุม iframe (อาจไม่สมบูรณ์เนื่องจาก Cross-Origin)
+         window.onload = function() {
+            var iframe = document.querySelector('iframe');
+            if (iframe) {
+               iframe.contentWindow.document.addEventListener('contextmenu', function(e) {
+                  e.preventDefault();
+               });
+            }
+         };
       </script>
    </head>
    <body>
