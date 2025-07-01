@@ -8,14 +8,12 @@
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
-            overflow: hidden; /* ป้องกันการเลื่อนเพื่อดูโค้ด */
+            overflow: hidden;
          }
-         iframe {
-            pointer-events: none; /* ป้องกันการโต้ตอบกับ iframe โดยตรง */
-         }
+         /* ลบ pointer-events: none ออกจาก iframe เพื่อให้สามารถโต้ตอบได้ */
       </style>
       <script>
-         // ป้องกันการคลิกขวา
+         // ป้องกันการคลิกขวาในหน้าแม่
          document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
             alert('การคลิกขวาถูกปิดใช้งานเพื่อปกป้องเนื้อหา');
@@ -36,14 +34,18 @@
          window.onload = function() {
             var iframe = document.querySelector('iframe');
             if (iframe) {
-               iframe.contentWindow.document.addEventListener('contextmenu', function(e) {
-                  e.preventDefault();
-               });
+               try {
+                  iframe.contentWindow.document.addEventListener('contextmenu', function(e) {
+                     e.preventDefault();
+                  });
+               } catch (e) {
+                  // ข้ามข้อผิดพลาดจาก Cross-Origin
+               }
             }
          };
       </script>
    </head>
    <body>
-      <iframe style="position: absolute;top: 0;left: 0;width: 100%;height: 100%;border: 0;" src="https://app--smart-quote-7ebf766a.base44.app"></iframe>
+      <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" src="https://app--smart-quote-7ebf766a.base44.app"></iframe>
    </body>
 </html>
